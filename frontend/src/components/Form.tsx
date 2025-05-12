@@ -3,6 +3,7 @@ import { ADD_COUNTRY, GET_CONTINENTS, GET_COUNTRIES } from "../api/example";
 import { useState } from "react";
 import { Continent } from "../entities/Continent";
 import isCountryFlag from "../services/verifyFlag";
+import isValidCountryCode from "../services/verifyCode";
 function Form() {
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState("");
@@ -84,19 +85,21 @@ function Form() {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="code" className=" flex text-sm gap-2 font-medium">
-            Code
-            {code.length > 2 && (
-              <p className="text-red-600 text-xs mt-1">2 letters max</p>
+          <label htmlFor="code" className=" flex gap-2 text-sm font-medium">
+            Code du pays
+            {code && !isValidCountryCode(code) && (
+              <p className="text-red-600 text-xs mt-1">2 letters only</p>
             )}
           </label>
           <input
             type="text"
-            placeholder="Code"
+            placeholder="FR"
             required
             maxLength={2}
             className={`border-2 rounded-md p-2 bg-white ${
-              code.length > 2 ? "border-red-400" : "border-gray-300"
+              code && !isValidCountryCode(code)
+                ? "border-red-400"
+                : "border-gray-300"
             }`}
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
